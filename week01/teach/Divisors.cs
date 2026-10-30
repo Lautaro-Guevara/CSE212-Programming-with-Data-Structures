@@ -19,6 +19,13 @@ public static class Divisors {
     private static List<int> FindDivisors(int number) {
         List<int> results = new();
         // TODO problem 1
+
+        // Determine possible divisors - iterate from 1 to number/2 because any divisor larger than number/2 would be the number itself, which we want to exclude.
+        for (int i = 1; i <= number/2; i++) {
+            if (number % i == 0) {
+                results.Add(i);
+            }
+        }
         return results;
     }
 }

@@ -11,6 +11,28 @@ public static class ArraySelector
 
     private static int[] ListSelector(int[] list1, int[] list2, int[] select)
     {
-        return [];
+        var results = new List<int>();
+        if (list1.Length + list2.Length != select.Length)
+        {
+            throw new ArgumentException("The lengths of the input lists and the select array do not match.");
+        }
+
+        var index1 = 0;
+        var index2 = 0;
+
+        for (int i = 0; i < select.Length; i++)
+        {
+            if (select[i] == 1)
+            {
+                results.Add(list1[index1]);
+                index1++;
+            }
+            else if (select[i] == 2)
+            {
+                results.Add(list2[index2]);
+                index2++;
+            }
+        }
+        return results.ToArray();
     }
 }
