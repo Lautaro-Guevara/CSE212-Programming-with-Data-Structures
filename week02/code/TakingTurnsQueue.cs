@@ -39,13 +39,18 @@ public class TakingTurnsQueue
         }
         else
         {
+            System.Console.WriteLine($"Queue before dequeue: {_people.ToString()}");
             Person person = _people.Dequeue();
             if (person.Turns > 1)
             {
                 person.Turns -= 1;
                 _people.Enqueue(person);
+            }else if (person.Turns <= 0)
+            {
+                // Person has infinite turns, keep them in the queue
+                _people.Enqueue(person);
             }
-
+            System.Console.WriteLine($"Dequeued person: {person.Name}, Turns left: {person.Turns}");
             return person;
         }
     }
