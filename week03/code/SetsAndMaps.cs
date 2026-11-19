@@ -22,7 +22,26 @@ public static class SetsAndMaps
     public static string[] FindPairs(string[] words)
     {
         // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        // Step 1: Create a set to store the words
+        var wordSet = new HashSet<string>(words);
+
+        // Step 2: Iterate through the words and find symmetric pairs
+        var result = new List<string>();
+        foreach (var word in words)
+        {
+            if (word[0] != word[1])
+            {
+                var reversed = new string(new char[] { word[1], word[0] });
+                if (wordSet.Contains(reversed))
+                {
+                    result.Add($"{word} & {reversed}");
+                    wordSet.Remove(word);
+                    wordSet.Remove(reversed);
+                }
+            }
+        }
+        
+        return result.ToArray();
     }
 
     /// <summary>
@@ -43,6 +62,15 @@ public static class SetsAndMaps
         {
             var fields = line.Split(",");
             // TODO Problem 2 - ADD YOUR CODE HERE
+            var degree = fields[3];
+            if (degrees.ContainsKey(degree))
+            {
+                degrees[degree]++;
+            }
+            else
+            {
+                degrees[degree] = 1;
+            }
         }
 
         return degrees;
@@ -67,7 +95,56 @@ public static class SetsAndMaps
     public static bool IsAnagram(string word1, string word2)
     {
         // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+
+        // Step 1: Verify if both words are not null or empty
+        if (string.IsNullOrWhiteSpace(word1) || string.IsNullOrWhiteSpace(word2))
+        {
+            return false;
+        }
+
+        // Step 2: Verify if both words have the same length after removing spaces and converting to lowercase
+        word1 = word1.Replace(" ", "").ToLower();
+        word2 = word2.Replace(" ", "").ToLower();
+        if (word1.Length != word2.Length)
+        {
+            return false;
+        }
+
+        // Step 3: Create dictionaries to count the frequency of each letter in both words
+        var word1LetterCounts = new Dictionary<char, int>();
+        var word2LetterCounts = new Dictionary<char, int>();
+        foreach (var letter in word1)
+        {
+            if (word1LetterCounts.ContainsKey(letter))
+            {
+                word1LetterCounts[letter]++;
+            }
+            else
+            {
+                word1LetterCounts[letter] = 1;
+            }
+        }
+        foreach (var letter in word2)
+        {
+            if (word2LetterCounts.ContainsKey(letter))
+            {
+                word2LetterCounts[letter]++;
+            }
+            else
+            {
+                word2LetterCounts[letter] = 1;
+            }
+        }
+
+        // Step 4: Compare the dictionaries to see if they have the same letters in the same amount
+        foreach (var kvp in word1LetterCounts)
+        {
+            if (!word2LetterCounts.ContainsKey(kvp.Key) || word2LetterCounts[kvp.Key] != kvp.Value)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     /// <summary>
@@ -100,7 +177,14 @@ public static class SetsAndMaps
         // 1. Add code in FeatureCollection.cs to describe the JSON using classes and properties 
         // on those classes so that the call to Deserialize above works properly.
         // 2. Add code below to create a string out each place a earthquake has happened today and its magitude.
+        var earthquakeDescriptions = new List<string>();
+        foreach (var feature in featureCollection.Features)
+        {
+            var place = feature.Properties.Place;
+            var magnitude = feature.Properties.Mag;
+            earthquakeDescriptions.Add($"{place} - Mag {magnitude},");
+        }
         // 3. Return an array of these string descriptions.
-        return [];
+        return earthquakeDescriptions.ToArray();
     }
 }
